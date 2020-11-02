@@ -2,24 +2,24 @@ version: "2.0"
 services:
   web1:
     image: counterapp
+    container_name: counterapp_1
     ports:
       - "8081:8080"
-    command: -serverid 0
+    command: -serverid 1
   web2:
     image: counterapp
+    container_name: counterapp_2
     ports:
       - "8082:8080"
-    command: -serverid 1
+    command: -serverid 2
   web3:
     image: counterapp
+    container_name: counterapp_3
     ports:
       - "8083:8080"
-    command: -serverid 2
+    command: -serverid 3
   balancer:
-    image: nginx
+    image: lb_random
+    container_name: balancer
     ports:
-      - "8084:8080"
-    networks:
-      - host
-    volumes:
-      - /home/nikitars/Докуметы/Учёба/Облачные технологии и разработка высоконагруженных веб-приложений/WebDev-Highload-and-Cloud-/NginxConfigFile/nginxLoadBalancer_Simple.conf:/etc/nginx/nginx.conf
+      - "8080:80"
