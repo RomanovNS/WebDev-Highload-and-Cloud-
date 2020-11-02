@@ -1,0 +1,2 @@
+FROM nginx
+COPY NginxConfigFiles/nginxLoadBalancer_RoundRobin.conf /etc/nginx/nginx.conf
