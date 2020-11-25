@@ -122,7 +122,7 @@ public class LabsLoader {
         }
         public static void start(){
             //Стартуем с помощью docker-compose
-            runCommand("docker-compose -f DockerFiles/docker-compose.yml up -d");
+            runCommand("docker-compose -f DockerFiles/docker-compose_cloudLaba1.yml up -d");
         }
         public static void stop(){
             //Останавливаем и удаляем все контейнеры
@@ -140,52 +140,51 @@ public class LabsLoader {
     public static class LabHighload2{
         public static void prepare(){
             //Удаляем все контейнеры и снимки с именами, подобными тем, что мы сейчас создадим
-            Docker.removeImage("lb_roundrobin");
             Docker.removeImage("lb_random");
-            Docker.removeImage("lb_leastconn");
-            Docker.removeImage("lb_leasttime");
-            Docker.removeImage("lb_iphash");
-            Docker.removeImage("lb_hash");
-            Docker.removeImage("counterapp");
+            Docker.removeImage("counterappredis");
             //Создаём все снимки
-            Docker.buildImage("DockerFiles/dockerfile_counterApp", "counterapp");
-            Docker.buildImage("DockerFiles/dockerfile_nginxLoadBalancer_RoundRobin", "lb_roundrobin");
+            Docker.buildImage("DockerFiles/dockerfile_counterAppRedis", "counterappredis");
             Docker.buildImage("DockerFiles/dockerfile_nginxLoadBalancer_Random", "lb_random");
-            Docker.buildImage("DockerFiles/dockerfile_nginxLoadBalancer_LeastConn", "lb_leastconn");
-            Docker.buildImage("DockerFiles/dockerfile_nginxLoadBalancer_LeastTime", "lb_leasttime");
-            Docker.buildImage("DockerFiles/dockerfile_nginxLoadBalancer_IpHash", "lb_iphash");
-            Docker.buildImage("DockerFiles/dockerfile_nginxLoadBalancer_Hash", "lb_hash");
-
         }
         public static void start(){
-            //Стартуем всеми контейнерами
-            Docker.runContainer("counterapp", "counterapp_1", "-serverid 1",true, true, new int[][]{{8081, 8080}});
-            Docker.runContainer("counterapp", "counterapp_2", "-serverid 2",true, true, new int[][]{{8082, 8080}});
-            Docker.runContainer("counterapp", "counterapp_3", "-serverid 3",true, true, new int[][]{{8083, 8080}});
-            Docker.runContainer("counterapp", "counterapp_4", "-serverid 4",true, true, new int[][]{{8084, 8080}});
-
-            //Docker.runContainer("lb_roundrobin", "balancer", "",true, true, new int[][]{{8080, 80}});
-            Docker.runContainer("lb_random", "balancer", "",true, true, new int[][]{{8080, 80}});
-            //Docker.runContainer("lb_leastconn", "balancer", "",true, true, new int[][]{{8080, 80}});
-            //Docker.runContainer("lb_leasttime", "balancer", "",true, true, new int[][]{{8080, 80}});
-            //Docker.runContainer("lb_iphash", "balancer", "",true, true, new int[][]{{8080, 80}});
-            //Docker.runContainer("lb_hash", "balancer", "",true, true, new int[][]{{8080, 80}});
+            //Стартуем с помощью docker-compose
+            runCommand("docker-compose -f DockerFiles/docker-compose_redis.yml up -d");
         }
         public static void stop(){
             //Останавливаем и удаляем все контейнеры
             Docker.killContainer("counterapp_1");
             Docker.killContainer("counterapp_2");
             Docker.killContainer("counterapp_3");
-            Docker.killContainer("counterapp_4");
             Docker.killContainer("balancer");
+            Docker.killContainer("myredis");
+            Docker.removeContainer("counterapp_1");
+            Docker.removeContainer("counterapp_2");
+            Docker.removeContainer("counterapp_3");
+            Docker.removeContainer("balancer");
+            Docker.removeContainer("myredis");
         }
     }
 
     public static void main(String[] args) {
+        //LabHighload1.prepare();
+        //LabCloud1.stop();
 
+        //Docker.runContainer("redis", "some-redis", "", true, true, new int[][]{{8085, 6379}});
 
         //Docker.imagesList();
+        //Docker.containersList();
+        //Docker.containersListAll();
+        //Docker.killContainer("some-redis");
 
+        //Docker.runContainer("counterapp", "counterapp_1", "-serverid 1",false, true, new int[][]{{8080, 8080}});
+
+        Docker.removeImage("counterapp");
+        Docker.buildImage("DockerFiles/dockerfile_counterApp", "counterapp");
+        Docker.runContainer("counterapp", "app", "-serverid 1", false, true, new int[][]{{8080, 8080}});
+
+        //Docker.removeImage("counterappredis");
+        //Docker.buildImage("DockerFiles/dockerfile_counterAppRedis", "counterappredis");
+        //Docker.runContainer("counterappredis", "redisapp", "-serverid 1", false, true, new int[][]{{8080, 8080}});
     }
 }
 

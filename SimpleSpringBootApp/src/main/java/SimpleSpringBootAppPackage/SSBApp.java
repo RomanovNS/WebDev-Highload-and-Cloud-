@@ -19,7 +19,6 @@ public class SSBApp {
     String home() {
         counter++;
         return "{ \"WebAppID\": " + serverID + ", \"counter\": " + counter + " }";
-        //return "{ \"counter\": " + counter + " }";
     }
 
     public static void main(String[] args) {
@@ -30,11 +29,6 @@ public class SSBApp {
             }
             arg_id++;
         }
-
-        //for (String arg : args) {
-        //    System.out.println(arg);
-        //}
-        //System.out.println("serverid = " + serverID);
 
         SpringApplication.run(SSBApp.class, args);
     }
