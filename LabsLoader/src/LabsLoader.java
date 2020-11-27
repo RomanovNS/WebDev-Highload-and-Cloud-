@@ -166,8 +166,9 @@ public class LabsLoader {
     }
 
     public static void main(String[] args) {
-        //LabHighload1.prepare();
-        //LabCloud1.stop();
+        //LabHighload2.prepare();
+        //LabHighload2.start();
+        //LabHighload2.stop();
 
         //Docker.runContainer("redis", "some-redis", "", true, true, new int[][]{{8085, 6379}});
 
@@ -178,9 +179,9 @@ public class LabsLoader {
 
         //Docker.runContainer("counterapp", "counterapp_1", "-serverid 1",false, true, new int[][]{{8080, 8080}});
 
-        Docker.removeImage("counterapp");
-        Docker.buildImage("DockerFiles/dockerfile_counterApp", "counterapp");
-        Docker.runContainer("counterapp", "app", "-serverid 1", false, true, new int[][]{{8080, 8080}});
+        //Docker.removeImage("counterapp");
+        //Docker.buildImage("DockerFiles/dockerfile_counterApp", "counterapp");
+        //Docker.runContainer("counterapp", "app", "-serverid 1", false, true, new int[][]{{8080, 8080}});
 
         //Docker.removeImage("counterappredis");
         //Docker.buildImage("DockerFiles/dockerfile_counterAppRedis", "counterappredis");

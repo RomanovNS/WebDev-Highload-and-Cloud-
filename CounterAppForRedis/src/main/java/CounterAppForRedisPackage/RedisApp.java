@@ -1,25 +1,16 @@
 package CounterAppForRedisPackage;
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-@Controller
+@Configuration
 @EnableAutoConfiguration
+@ComponentScan
 public class RedisApp {
-
     public static int serverID = 0;
     public static int counter = 0;
-
-    @RequestMapping("/")
-    @ResponseBody
-    String home() {
-        counter++;
-        return "{ \"WebAppID\": " + serverID + ", \"counter\": " + counter + " }";
-    }
 
     public static void main(String[] args) {
         int arg_id = 0;
