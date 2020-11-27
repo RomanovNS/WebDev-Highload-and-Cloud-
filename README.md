@@ -42,18 +42,53 @@
 ### Как проверить эту лабу
 Чтобы запустить контейнеры с экземплярами веб-приложения и Nginx-ом, нужно всего лишь прописать в main у LabsLoader-a
 
-    LabHighLoad1.prepare();
-    LabHighLoad1.start();
+    LabHighload1.prepare();
+    LabHighload1.start();
 
 и запустить его. Он создаст и запустит 4 контейнера с веб-приложением и 1 с nginx.
 
 Чтобы остановить контейнеры, нужно прописать в main у LabsLoader-a
 
-    LabHighLoad1.stop();
+    LabHighload1.stop();
 
 и запустить проект.
 
 Для выбора способа балансировки нужно раскомменить соответствующую строку в LabsHighLoad1.start(){}, взамен той, что используется.
+
+## 2. Разделяемое хранилище данных с использованием Redis
+### О чём эта лаба
+В рамках данной лабы было нужно доработать так приложение из предыдущей лабораторной, чтобы счётчик входящих запросов хранился в Redis и, таким образом, был общим.
+
+### Файлы к этой лабе
+Директории и файлы, используемые для данной лабы:
+- DockerFiles
+  - dockerfile_counterAppRedis (для сборки контейрера с нашим веб-приложением)
+  - dockerfile_nginxLoadBalancer_Random (для сборки контейнера с nginx, балансирующего по алгоритму Random)
+  - docker-compose_redis.yml
+- JARs
+  - CounterAppForRedis.jar (JAR с нашим веб-приложением)
+- NginxConfigFiles
+  - nginxLoadBalancer_Random.conf (конфигурационный файл nginx, в котором определена балансировка по алгоритму Random)
+- CounterAppForRedis (папка с maven-проектом веб-приложения, из которого получили JARник)
+
+### Как проверить эту лабу
+Чтобы подготовить все докер-снимки, нужно всего лишь прописать в main у LabsLoader-a
+
+    LabHighload2.prepare();
+    
+и запустить его.
+
+Чтобы запустить все контейнеры, нужно поменять запускаемый метод на
+
+    LabHighload2.start();
+    
+Данный метод запустит командную строку для docker-compose.
+
+Чтобы остановить контейнеры, нужно прописать в main у LabsLoader-a
+
+    LabHighload2.stop();
+
+и запустить проект.
 
 # Лабораторные по облаку
 ## 1. Запуск приложения с использованием Docker
@@ -68,6 +103,7 @@
 - DockerFiles
   - dockerfile_counterApp (для сборки контейрера с нашим веб-приложением)
   - dockerfile_nginxLoadBalancer_Random (для сборки контейнера с nginx, балансирующего по алгоритму Random)
+  - docker-compose_cloudLaba1.yml
 - JARs
   - SimpleSpringBootApp.jar (JAR с нашим веб-приложением)
 - NginxConfigFiles
