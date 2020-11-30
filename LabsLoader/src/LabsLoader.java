@@ -65,9 +65,66 @@ public class LabsLoader {
         public static void imagesList(){
             runCommand("docker images");
         }
+        public static void killAllContainers(){
+            String str;
+            Process proc;
+            List<String> containersIDs = new LinkedList<String>();
+            try{
+                proc = Runtime.getRuntime().exec("docker ps -q");
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                while((str = bufferedReader.readLine()) != null){
+                    containersIDs.add(str);
+                }
+                proc.waitFor();
+                System.out.println("Containers IDs extracted.");
+                proc.destroy();
+            }
+            catch (Exception e){}
+            for (String containerID : containersIDs) {
+                try{
+                    proc = Runtime.getRuntime().exec("docker kill " + containerID);
+                    proc.waitFor();
+                    System.out.println("Container (ID: " + containerID + ") killed.");
+                    proc.destroy();
+                }
+                catch (Exception e){
+                    System.out.println("Container (ID: " + containerID + ") killing error!");
+                }
+            }
+        }
+        public static void removeAllContainers(){
+            String str;
+            Process proc;
+            List<String> containersIDs = new LinkedList<String>();
+            try{
+                proc = Runtime.getRuntime().exec("docker ps -a -q");
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                while((str = bufferedReader.readLine()) != null){
+                    containersIDs.add(str);
+                }
+                proc.waitFor();
+                System.out.println("Containers IDs extracted.");
+                proc.destroy();
+            }
+            catch (Exception e){}
+            for (String containerID : containersIDs) {
+                try{
+                    proc = Runtime.getRuntime().exec("docker rm " + containerID);
+                    proc.waitFor();
+                    System.out.println("Container (ID: " + containerID + ") removed.");
+                    proc.destroy();
+                }
+                catch (Exception e){
+                    System.out.println("Container (ID: " + containerID + ") removing error!");
+                }
+            }
+        }
+        public static void executeCommandInContainer(String container, String commandLine) {
+            runCommand("docker exec -it " + container + " " + commandLine);
+        }
     }
 
-    public static class LabHighload1{
+    public static class LabHighLoad1{
         public static void prepare(){
             //Удаляем все контейнеры и снимки с именами, подобными тем, что мы сейчас создадим
             Docker.removeImage("lb_roundrobin");
@@ -137,7 +194,7 @@ public class LabsLoader {
         }
     }
 
-    public static class LabHighload2{
+    public static class LabHighLoad2{
         public static void prepare(){
             //Удаляем все контейнеры и снимки с именами, подобными тем, что мы сейчас создадим
             Docker.removeImage("lb_random");
@@ -165,23 +222,39 @@ public class LabsLoader {
         }
     }
 
-    public static void main(String[] args) {
-        //LabHighload2.prepare();
-        //LabHighload2.start();
-        //LabHighload2.stop();
+    public static class LabHighLoad3{
+        public static void prepare(){
 
-        //Docker.runContainer("redis", "some-redis", "", true, true, new int[][]{{8085, 6379}});
+        }
+        public static void start(){
+            runCommand("docker-compose -f DockerFiles/docker-compose_kafkaBitnami.yml up -d");
+
+        }
+        public static void stop(){
+
+        }
+    }
+
+    public static void main(String[] args) {
+        //LabHighLoad3.prepare();
+        //LabHighLoad3.start();
+        //LabHighLoad3.stop();
+
+        //Docker.killAllContainers();
+        //Docker.removeAllContainers();
+
+        //runCommand("docker attach 49decf055e69");
 
         //Docker.imagesList();
         //Docker.containersList();
         //Docker.containersListAll();
-        //Docker.killContainer("some-redis");
-
-        //Docker.runContainer("counterapp", "counterapp_1", "-serverid 1",false, true, new int[][]{{8080, 8080}});
+        //Docker.executeCommandInContainer("49decf055e69", "echo");
 
         //Docker.removeImage("counterapp");
         //Docker.buildImage("DockerFiles/dockerfile_counterApp", "counterapp");
         //Docker.runContainer("counterapp", "app", "-serverid 1", false, true, new int[][]{{8080, 8080}});
+
+        //runCommand("docker-compose -f DockerFiles/docker-compose_kafkaConfluent.yml up -d");
 
         //Docker.removeImage("counterappredis");
         //Docker.buildImage("DockerFiles/dockerfile_counterAppRedis", "counterappredis");
