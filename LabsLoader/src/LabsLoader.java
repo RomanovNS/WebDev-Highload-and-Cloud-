@@ -236,12 +236,12 @@ public class LabsLoader {
     }
 
     public static void main(String[] args) {
-        //LabHighLoad3.prepare();
-        //LabHighLoad3.start();
-        //LabHighLoad3.stop();
+        //LabHighLoad2.prepare();
+        //LabHighLoad2.start();
+        //LabHighLoad2.stop();
 
-        //Docker.killAllContainers();
-        //Docker.removeAllContainers();
+        Docker.killAllContainers();
+        Docker.removeAllContainers();
 
         //runCommand("docker attach 49decf055e69");
 
@@ -255,6 +255,8 @@ public class LabsLoader {
         //Docker.runContainer("counterapp", "app", "-serverid 1", false, true, new int[][]{{8080, 8080}});
 
         //runCommand("docker-compose -f DockerFiles/docker-compose_kafkaConfluent.yml up -d");
+
+        Docker.containersListAll();
 
         //Docker.removeImage("counterappredis");
         //Docker.buildImage("DockerFiles/dockerfile_counterAppRedis", "counterappredis");
