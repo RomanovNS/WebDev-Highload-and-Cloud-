@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>ImageApp</title>
+        <link rel="stylesheet" href="/css/mainStyles.css">
+        <style>
+            :root{
+                --bucketButtonHover: rgb(230, 230, 230);
+
+                --colorText: rgb(60, 60, 60);
+                --colorText2: rgb(90, 90, 90);
+
+            }
+            #wrapper{
+                font-family: DINPro;
+                font-weight: normal;
+            }
+            #header {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font: 50px Agency FB Cyrillic;
+                color: var(--colorText);
+            }
+            .headerLine{
+                width: 2em;
+                height: 2px;
+                margin: 0.5em;
+                background-color: var(--colorText);
+            }
+
+            .buttonContainer {
+                display: inline-flex;
+                position: relative;
+                margin: 0.1em;
+            }
+            .deletionCrest {
+                position: absolute;
+                right: 0.4em;
+                top: 0.5em;
+                width: 1.4em;
+                height: 1.4em;
+                font-size: 0.8em;
+                text-align: center;
+                margin-left: 10px;
+                border-radius: 0.7em;
+                z-index: 501;
+                color: var(--colorText);
+                transition: 0.2s;
+            }
+            .deletionCrest:hover {
+                background-color: var(--colorText);
+                color: white;
+            }
+            .deletionCrestChoosed {
+                position: absolute;
+                right: 0.4em;
+                top: 0.5em;
+                width: 1.4em;
+                height: 1.4em;
+                font-size: 0.8em;
+                text-align: center;
+                margin-left: 10px;
+                border-radius: 0.7em;
+                z-index: 501;
+                color: white;
+                transition: 0.2s;
+            }
+            .deletionCrestChoosed:hover {
+                background-color: white;
+                color: var(--colorText);
+            }
+            .bucketButton {
+                background: white;
+                color: var(--colorText);
+                padding: 0.2em;
+                padding-left: 0.4em;
+                padding-right: 1.8em;
+                border-radius: 0.6em;
+                border-width: 0.1em;
+                border-color: var(--colorText);
+                border-style: solid;
+                transition: 0.2s;
+                z-index: 500;
+            }
+            .bucketButton:hover {
+                background: var(--bucketButtonHover);
+            }
+            .bucketButtonChoosed {
+                background: var(--colorText);
+                color: white;
+                padding: 0.2em;
+                padding-left: 0.4em;
+                padding-right: 1.8em;
+                border-radius: 0.6em;
+                border-width: 0.1em;
+                border-color: var(--colorText);
+                border-style: solid;
+                transition: 0.2s;
+                z-index: 500;
+            }
+            .bucketButtonChoosed:hover {
+                background: var(--colorText2);
+            }
+            .availableBuckets {
+                margin: 0.5em;
+            }
+            .addBuckets {
+                margin: 0.5em;
+            }
+            .textInput {
+                width: 10em;
+                align-self: stretch;
+                padding: 0 0.5em;
+                color: inherit;
+                border: solid 0.1em;
+                font-size: 1em;
+                font-family: DINPro;
+                font-weight: 600;
+            }
+            .textInput:focus {
+                color: white;
+                background-color: var(--colorText);
+            }
+            .addBucketButton {
+                border: solid 0.1em;
+                border-color: var(--colorText);
+                padding-left: 0.4em;
+                padding-right: 0.4em;
+                margin-left: -0.3em;
+                transition: 0.2s;
+            }
+            .addBucketButton:hover {
+                color: white;
+                background: var(--colorText);
+            }
+
+            #buckets {
+                horiz-align: right;
+
+            }
+            #bucketsMenu {
+
+                font-size: 20px;
+            }
+            #images {
+                margin-top: 20px;
+            }
+            #bucketImages{
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0 4px;
+                margin-top: 15px;
+            }
+            .bucketImagesColumn{
+                flex: 25%;
+                padding: 0 4px;
+            }
+            .bucketImages{
+                width: 100%;
+                padding: 4px;
+                vertical-align: middle;
+                transition: 0.2s;
+                background-color: white;
+            }
+            .bucketImages:hover{
+                background-color: var(--colorText);
+            }
+
+            .addImageLabel {
+                font-size: 20px;
+                background: white;
+                color: var(--colorText);
+                padding: 0.2em;
+                padding-left: 0.4em;
+                padding-right: 0.4em;
+                border-radius: 0.6em;
+                border-width: 0.1em;
+                border-color: var(--colorText);
+                border-style: solid;
+                transition: 0.2s;
+                z-index: 500;
+            }
+            .addImageLabel:hover{
+                background: var(--colorText);
+                color: white;
+            }
+            .addImageInput {
+                display: none;
+            }
+
+            .currentImageDivVisible {
+                position: fixed;
+                margin: auto;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                opacity: 1;
+                z-index: 1000;
+                transition: 0.3s;
+            }
+            .currentImageDivHidden {
+                position: fixed;
+                margin: auto;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -10;
+                opacity: 0;
+                background-color: rgba(0, 0, 0, 0.0);
+                transition: 0.3s;
+            }
+            .closeCurrentImageDiv {
+                position: fixed;
+                right: 25px;
+                top: 25px;
+                width: 50px;
+                height: 50px;
+                border-radius: 30px;
+                border-width: 5px;
+                border-style: solid;
+                font-size: 35px;
+                text-align: center;
+
+                opacity: 0.8;
+                color: rgb(200, 200, 200);
+                border-color: rgba(200, 200, 200, 1);
+                background-color: rgba(200, 200, 200, 0);
+
+                z-index: 1001;
+                transition: 0.3s;
+            }
+            .closeCurrentImageDiv:hover {
+                color: rgb(0, 0, 0);
+                background-color: rgba(200, 200, 200, 1);
+            }
+            .closeCurrentImageDivHidden {
+                position: fixed;
+                right: 25px;
+                top: 25px;
+                width: 50px;
+                height: 50px;
+                border-radius: 25px;
+                font-size: 35px;
+                text-align: center;
+
+                opacity: 0;
+                color: rgb(200, 200, 200);
+                background-color: rgb(0, 0, 0);
+
+                z-index: -10;
+                transition: 0.3s;
+            }
+
+            #imageFileName {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 5%;
+                margin-left: 10%;
+                margin-right: 10%;
+                text-align: center;
+                font-size: 20px;
+                font-family: DINPro;
+                color: white;
+            }
+            #deleteImage {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 20em;
+                margin-left: auto;
+                margin-right: auto;
+
+                font-size: 20px;
+                font-family: DINPro;
+                font-weight: 600;
+
+                background-color: rgba(255, 0, 0, 0);
+                color: rgba(255, 0, 0, 1);
+                border-color: rgba(255, 0, 0, 1);
+
+                padding: 0.2em;
+                padding-left: 0.4em;
+                padding-right: 0.4em;
+                border-radius: 0.6em;
+                border-width: 0.2em;
+                border-style: solid;
+                transition: 0.2s;
+            }
+            #deleteImage:hover {
+                background-color: rgba(255, 0, 0, 1);
+                color: rgb(0, 0, 0);
+                border-color: rgba(255, 0, 0, 1);
+            }
+            #canv {
+                display: flex;
+                max-width: 80%;
+                max-height: 60%;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+
+            #tags {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20px;
+                margin-bottom: 30px;
+
+                font-size: 20px;
+                font-family: DINPro;
+                font-weight: 600;
+            }
+            .tagStyle {
+                background-color: rgba(0, 100, 255, 0);
+                color: rgba(0, 100, 255, 1);
+
+                margin: 3px;
+                padding: 0.2em;
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+                border-radius: 0.6em;
+                border-width: 0.2em;
+                border-color: rgba(0, 100, 255, 1);
+                border-style: solid;
+                transition: 0.2s;
+            }
+            .tagStyle:hover {
+                background-color: rgba(0, 100, 255, 1);
+                color: rgb(0, 0, 0);
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="currentImageDiv" class="currentImageDivHidden">
+            <div id="imageFileName"></div>
+            <canvas id="canv">
+
+            </canvas>
+            <div id="tags">
+
+            </div>
+            <div id="deleteImage">Удалить</div>
+        </div>
+        <div id="closeCurrentImage" class="closeCurrentImageDivHidden" onclick="closeCurrentImage()">
+            &#10006
+        </div>
+        <div id="wrapper">
+            <div id="header">
+                <div class='headerLine'> </div>
+                <span>S3 + VISION</span>
+                <div class='headerLine'> </div>
+            </div>
+            <div id="bucketsMenu">
+                <div class="availableBuckets">Доступные бакеты: </div>
+                <div id="buckets">
+                    <!-- Тут будут кнопочки-бакеты -->
+                </div>
+                <div id="addNewBucketButton" class="addBuckets">
+                    <input id="newBucketNameInput" type="text" class="textInput" placeholder="NewBucket">
+                    <span class="addBucketButton" onclick="createBucket()">Добавить бакет</span>
+                </div>
+            </div>
+            <div id="images">
+                <label id="imageLoadButton" class="addImageLabel">
+                    <input id="imageFileInput" class="addImageInput" type="file">
+                    Загрузить картинку
+                </label>
+                <div id="bucketImages">
+                    <!-- Тут будут картиночки из какого-то бакета -->
+                </div>
+            </div>
+        </div>
+
+
+        <template id="rectTemplate">
+
+        </template>
+        <template id="bucketTemplate">
+            <span class="buttonContainer">
+                <span class="bucketButton">
+                    BucketName
+                </span>
+                <span class="deletionCrest">
+                    &#10006
+                </span>
+            </span>
+        </template>
+
+
+
+        <script>
+            var selectedBucketNumber = -1;
+            var selectedBucketName = '';
+            var bucketButtonTemplate = document.querySelector('#bucketTemplate');
+            var buckets = document.querySelector('#buckets');
+            var bucketNameInput = document.querySelector('#newBucketNameInput');
+            var imageFileInput = document.querySelector('#imageFileInput');
+            var currentImageDiv = document.querySelector('#currentImageDiv');
+            var currentImageCloser = document.querySelector('#closeCurrentImage');
+            var bucketImages = document.querySelector('#bucketImages');
+            var imageCanvas = document.querySelector('#canv');
+            var currentImageName = document.querySelector('#imageFileName');
+            var imageTags = document.querySelector('#tags');
+            var deleteImageButton = document.querySelector("#deleteImage");
+            var numberOfColumns = 6;
+
+            function getImageList(bucketName){
+                let url = 'http://localhost:8080/imagesList/' + bucketName;
+                let response = '[]';
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        response = this.responseText;
+                    }
+                };
+                xhttp.open('GET', url, false);
+                xhttp.send();
+                return response;
+            }
+            function getImage(bucketName, imageName) {
+                let url = 'http://localhost:8080/images/' + bucketName + '/' + imageName;
+                alert(url);
+                let xhttp1 = new XMLHttpRequest();
+                let imgSrc;
+                alert('1');
+                xhttp1.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let blob = new Blob([this.response], {type: this.getResponseHeader("content-Type")});
+                        imgSrc = window.URL.createObjectURL(blob);
+                    }
+                };
+                alert('2');
+                xhttp1.responseType = "arraybuffer";
+                alert('3');
+                alert(url);
+                xhttp1.open('GET', url, false);
+                alert('4');
+                xhttp1.send();
+                alert('5');
+                return imgSrc;
+            }
+            function getImageAsync(bucketName, imageName, parentNode) {
+                let url = 'http://localhost:8080/images/' + bucketName + '/' + imageName;
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let blob = new Blob([this.response], {type: this.getResponseHeader("content-Type")});
+                        let imgSrc = window.URL.createObjectURL(blob);
+                        let imgElem = document.createElement("img");
+                        imgElem.className = 'bucketImages';
+                        imgElem.id = imageName;
+                        imgElem.src = imgSrc;
+                        imgElem.onclick = function () {
+                            selectImage(imgSrc, imageName, bucketName);
+                        }
+                        parentNode.appendChild(imgElem);
+                    }
+                };
+                xhttp.responseType = "arraybuffer";
+                xhttp.open('GET', url, true);
+                xhttp.send();
+            }
+            function getImageVisionData(bucketName, imageName) {
+                let url = 'http://localhost:8080/vision/' + bucketName + '/' + imageName;
+                let response = '';
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        response = this.responseText;
+                    }
+                };
+                xhttp.open('GET', url, false);
+                xhttp.send();
+                return response;
+            }
+            function uploadImage(bucketName, image) {
+                let visionData;
+                let formData = new FormData();
+                formData.append('file', image);
+                let url = 'http://localhost:8080/uploadImage/' + bucketName + '/' + image.name;
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        visionData = this.responseText;
+                    }
+                };
+                xhttp.open('POST', url, false);
+                xhttp.send(formData);
+                loadImagesFromBucket(bucketName);
+            }
+            function deleteImage(bucketName, imageName){
+                let url = 'http://localhost:8080/delete/' + bucketName + '/' + imageName;
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        closeCurrentImage();
+                        loadImagesFromBucket(bucketName);
+                    }
+                };
+                xhttp.responseType = "arraybuffer";
+                xhttp.open('DELETE', url, true);
+                xhttp.send();
+            }
+
+            function selectImage(imageSrc, imageName, bucketName){
+                currentImageName.innerHTML = imageName;
+                let visionDataJSON = getImageVisionData(bucketName, imageName);
+                let visionData = JSON.parse(visionDataJSON);
+                let labels = visionData.body.object_labels[0].labels;
+
+                let image = new Image();
+                image.src = imageSrc;
+
+                imageCanvas.width = image.width;
+                imageCanvas.height = image.height;
+
+                let context = imageCanvas.getContext("2d");
+                context.drawImage(image, 0, 0);
+
+                imageCanvas.onclick = function(){
+                    context.drawImage(image, 0, 0);
+                }
+                context.strokeStyle = "red";
+                context.lineWidth = image.width / 100;
+                labels.forEach( (label) =>{
+                    let newTag = document.createElement("span");
+                    newTag.innerText = label.rus;
+                    newTag.className = 'tagStyle';
+                    newTag.onclick = function() {
+                        context.strokeRect(label.coord[0], label.coord[1], label.coord[2] - label.coord[0], label.coord[3] - label.coord[1]);
+                    }
+                    imageTags.appendChild(newTag);
+                });
+
+                currentImageDiv.className = 'currentImageDivVisible';
+                currentImageCloser.className = 'closeCurrentImageDiv';
+            }
+            function closeCurrentImage() {
+                currentImageDiv.className = 'currentImageDivHidden';
+                currentImageCloser.className = 'closeCurrentImageDivHidden';
+                imageTags.innerHTML = '';
+            }
+
+            function loadImagesFromBucket(bucketName){
+                clearShowedImages();
+                let imagesListJSON = getImageList(bucketName);
+                let imagesList = JSON.parse(imagesListJSON);
+                let divs = [];
+                for (let i = 0; i < numberOfColumns; i++) {
+                    let newDiv = document.createElement("div");
+                    newDiv.className = 'bucketImagesColumn';
+                    newDiv.style.flex = '2%';
+                    divs.push(newDiv);
+                    bucketImages.appendChild(newDiv);
+                }
+                let imagesNumber = imagesList.length;
+                for (let i = 0; i < imagesNumber; i++) {
+                    getImageAsync(bucketName, imagesList[i], divs[i%numberOfColumns]);
+                }
+            }
+            function clearShowedImages(){
+                bucketImages.innerHTML = '';
+            }
+            function enableImageUploading(){
+
+            }
+            function disableImageUploading(){
+
+            }
+
+            function bucketButtonClick(bucketName){
+                let childs = buckets.children;
+                for (let elem of childs){
+                    let spans = elem.querySelectorAll('span');
+                    if (spans[0].innerText == bucketName){
+                        spans[0].className = 'bucketButtonChoosed';
+                        spans[1].className = 'deletionCrestChoosed';
+                    }
+                    else{
+                        spans[0].className = 'bucketButton';
+                        spans[1].className = 'deletionCrest';
+                    }
+                }
+                selectedBucketName = bucketName;
+                enableImageUploading();
+                loadImagesFromBucket(bucketName);
+            }
+            function buildBucketButtons(bucketsJSON) {
+                buckets.innerHTML = '';
+                let bucketsList = JSON.parse(bucketsJSON);
+                bucketsList.forEach( (element) => {
+                    if (typeof element == 'string') {
+                        let mainSpan = bucketButtonTemplate.content.querySelector('span');
+                        let spans = mainSpan.querySelectorAll('span');
+                        spans[0].textContent = element;
+
+                        let newButton = document.importNode(bucketButtonTemplate.content, true);
+                        mainSpan = newButton.querySelector('span');
+                        spans = mainSpan.querySelectorAll('span');
+                        spans.id = element;
+                        spans[0].onclick = function() { bucketButtonClick(element); };
+                        spans[1].onclick = function() { deleteBucketButton(element); };
+                        buckets.appendChild(newButton);
+                    }
+                } );
+            }
+            function addBucketButton(result, bucketName) {
+                if (result == 'created') {
+                    let mainSpan = bucketButtonTemplate.content.querySelector('span');
+                    let spans = mainSpan.querySelectorAll('span');
+                    spans[0].textContent = bucketName;
+
+                    let newButton = document.importNode(bucketButtonTemplate.content, true);
+                    mainSpan = newButton.querySelector('span');
+                    spans = mainSpan.querySelectorAll('span');
+                    spans.id = bucketName;
+                    spans[0].onclick = function() { bucketButtonClick(bucketName); };
+                    spans[1].onclick = function() { deleteBucketButton(bucketName); };
+                    buckets.appendChild(newButton);
+                }
+                else { // result == 'error'
+                    alert('Не получилось создать такой бакет...');
+                }
+            }
+            function deleteBucketButton(bucketName){
+                let forDeletion;
+                let childs = buckets.children;
+                for (let elem of childs){
+                    let spans = elem.querySelectorAll('span');
+                    if (spans[0].innerText == bucketName){
+                        forDeletion = elem;
+                    }
+                }
+                forDeletion.parentNode.removeChild(forDeletion);
+                deleteBucket(bucketName);
+                if (bucketName == selectedBucketName){
+                    selectedBucketName = '';
+                    clearShowedImages();
+                    disableImageUploading();
+                }
+            }
+
+            function createBucket(){
+                let bucketName = bucketNameInput.value
+                let url = 'http://localhost:8080/createBucket/' + bucketName;
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        addBucketButton(this.responseText, bucketName);
+                    }
+                };
+                xhttp.open('GET', url, true);
+                xhttp.send();
+            }
+            function getBucketNames(){
+                let url = 'http://localhost:8080/allBuckets';
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        buildBucketButtons(this.responseText);
+                    }
+                };
+                xhttp.open('GET', url, true);
+                xhttp.send();
+            }
+            function deleteBucket(bucketName){
+                let url = 'http://localhost:8080/deleteBucket/' + bucketName;
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                    }
+                };
+                xhttp.open('DELETE', url, true);
+                xhttp.send();
+            }
+
+            window.onload = ()=>{
+                disableImageUploading();
+                imageFileInput.addEventListener('change', event =>{
+                    if (selectedBucketName == '') return;
+                    uploadImage(selectedBucketName, imageFileInput.files.item(0));
+                });
+                deleteImageButton.onclick = function() {
+                    deleteImage(selectedBucketName, currentImageName.innerHTML);
+                };
+
+                clearShowedImages();
+                getBucketNames();
+            }
+
+
+        </script>
+    </body>
+</html>
