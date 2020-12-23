@@ -33,12 +33,12 @@ public class LabsLoader {
     }
 
     public static class Docker{
-        public static void runContainer(String imageName, String containerName, String args, boolean background, boolean removeAfterExit, int[][] portPairsHostContainer){
+        public static void runContainer(String imageName, String containerName, String args, boolean detached, boolean removeAfterExit, int[][] portPairsHostContainer){
             String commandLine = "docker run --name=" + containerName + " ";
             for (int[] portsPair : portPairsHostContainer) {
                 commandLine += "-p " + portsPair[0] + ":" + portsPair[1] + " ";
             }
-            if (background) commandLine += "-d ";
+            if (detached) commandLine += "-d ";
             if (removeAfterExit) commandLine += "--rm ";
             commandLine += imageName + " " + args;
             runCommand(commandLine);
@@ -236,12 +236,19 @@ public class LabsLoader {
     }
 
     public static void main(String[] args) {
+
+        //Docker.buildImage("DockerFiles/dockerfile_counterAppForKubernetes", "romanovns/kubernetesapp");
+        //Docker.imagesList();
+        //Docker.runContainer("kubernetesapp", "test1", "-serverid 5", true, true, new int[][]{});
+        //Docker.containersListAll();
+        //Docker.killContainer("test1");
+
         //LabHighLoad2.prepare();
         //LabHighLoad2.start();
         //LabHighLoad2.stop();
 
-        Docker.killAllContainers();
-        Docker.removeAllContainers();
+        //Docker.killAllContainers();
+        //Docker.removeAllContainers();
 
         //runCommand("docker attach 49decf055e69");
 
@@ -256,7 +263,7 @@ public class LabsLoader {
 
         //runCommand("docker-compose -f DockerFiles/docker-compose_kafkaConfluent.yml up -d");
 
-        Docker.containersListAll();
+        //Docker.containersListAll();
 
         //Docker.removeImage("counterappredis");
         //Docker.buildImage("DockerFiles/dockerfile_counterAppRedis", "counterappredis");

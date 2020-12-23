@@ -1,0 +1,50 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: test1
+  namespace: default
+  selfLink: /api/v1/namespaces/default/services/test1
+  uid: 4188aca3-41af-47b7-8772-2571e35d5abd
+  resourceVersion: '34137'
+  creationTimestamp: '2020-12-22T22:53:32Z'
+  labels:
+    run: test1
+  managedFields:
+    - manager: kubectl-expose
+      operation: Update
+      apiVersion: v1
+      time: '2020-12-22T22:53:32Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:run': {}
+        'f:spec':
+          'f:externalTrafficPolicy': {}
+          'f:ports':
+            .: {}
+            'k:{"port":8080,"protocol":"TCP"}':
+              .: {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector':
+            .: {}
+            'f:run': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30644
+  selector:
+    run: test1
+  clusterIP: 10.103.89.185
+  type: NodePort
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+status:
+  loadBalancer: {}
